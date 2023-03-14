@@ -1,6 +1,6 @@
 export const CONSTANTS = {
     NAVBAR: {
-        TITLE: 'Classificação de Bens',
+        TITLE: 'Classificação de bens',
         BUTTON_TITLE: 'Novo Produto',
     },
     CHART: {
@@ -16,7 +16,9 @@ export const CONSTANTS = {
     MODAL: {
         TITLE: 'Adicionar Produto',
         PRODUCT_LABEL: 'Nome do Produto:',
+        REGISTRATION_LABEL: 'Número de Matrícula',
         PRODUCT_PLACEHOLDER: 'Digite o nome do produto',
+        REGISTRATION_PLACEHOLDER: 'Digite sua matrícula',
         CURVE_LABEL: 'Pontos na curva',
         INCOME_PLACEHOLDER: 'Renda',
         AMOUNT_PLACEHOLDER: 'Quantidade',
