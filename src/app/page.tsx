@@ -123,7 +123,7 @@ export default function Home() {
   };
 
   const options = {
-    indexAxis: 'y',
+    indexAxis: 'y' as any,
     responsive: true,
     plugins: {
       legend: {
