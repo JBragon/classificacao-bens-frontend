@@ -9,7 +9,7 @@ import {
   useFieldArray,
   Controller,
 } from "react-hook-form";
-import { CONSTANTS } from "../../utils/constants";
+import { CONSTANTS } from "../../utils/constants"; 
 
 export const Navbar = ({ onClose, onSuccess, onError }: NavbarProps) => {
   const {
