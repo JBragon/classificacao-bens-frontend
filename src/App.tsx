@@ -200,7 +200,7 @@ export default function Home() {
 
             {isLoading && (
               <div className="animate-spin">
-                {/* <LoaderIcon size={24} color={"#333"} /> */}
+                <LoaderIcon size={24} color={"#333"} />
               </div>
             )}
           </div>

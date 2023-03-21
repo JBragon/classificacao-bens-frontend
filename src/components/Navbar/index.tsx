@@ -2,6 +2,7 @@ import { NavbarProps, PostProductProps } from "../../types";
 import { PlusCircle, Trash } from "lucide-react";
 import { useState } from "react";
 import { Button, Modal, Spinner } from "flowbite-react";
+import { toast } from "react-toastify";
 
 import {
   useForm,
@@ -9,7 +10,7 @@ import {
   useFieldArray,
   Controller,
 } from "react-hook-form";
-import { CONSTANTS } from "../../utils/constants"; 
+import { CONSTANTS } from "../../utils/constants";
 
 export const Navbar = ({ onClose, onSuccess, onError }: NavbarProps) => {
   const {
@@ -17,7 +18,9 @@ export const Navbar = ({ onClose, onSuccess, onError }: NavbarProps) => {
     handleSubmit,
     control,
     formState: { errors },
+    reset
   } = useForm<PostProductProps>();
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "engelsCurvesPost",
@@ -43,16 +46,48 @@ export const Navbar = ({ onClose, onSuccess, onError }: NavbarProps) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 400) {
-          onError();
+
+          var erros = ""
+
+          if (data.errors?.Name)
+            erros = data.errors?.Registration?.join(", ")
+
+          if (data.errors?.Registration)
+            erros = data.errors?.Registration?.join(", ")
+
+          if (data.errors?.EngelsCurvesPost)
+            erros = erros + ", " + data.errors?.EngelsCurvesPost?.join(", ")
+
+          toast.error(`Erro ao criar produto: ${erros}`,
+            {
+              position: "bottom-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+
         } else {
           onSuccess();
+          setOpenModal(false);
+          reset({
+            name: "",
+            registration: ""
+          })
+
+          fields.map((item, index) => {
+            remove(index)
+          })
+
         }
       })
       .catch((err) => console.error(err))
       .finally(() => {
         setIsLoading(false);
         onClose();
-        setOpenModal(false);
       });
 
     console.log(data);
@@ -145,6 +180,23 @@ export const Navbar = ({ onClose, onSuccess, onError }: NavbarProps) => {
             <ul className="flex flex-col gap-4">
               <label htmlFor="product">{CONSTANTS.MODAL.CURVE_LABEL}</label>
 
+              <li key={"AdicionarPonto"} className="flex flex-wrap gap-2 mb-4">
+
+                <Button
+                  outline={true}
+                  className="mt-4"
+                  color="light"
+                  size="sm"
+                  type="button"
+                  onClick={() => append({ income: "", amount: "" })}
+                >
+                  <span className="flex justify-center items-center gap-2">
+                    {CONSTANTS.MODAL.ADD_BUTTON}{" "}
+                    <PlusCircle size={16} color={"#333"} />
+                  </span>
+                </Button>
+              </li>
+
               {fields.map((item, index) => (
                 <li key={item.id} className="flex flex-wrap gap-2 mb-4">
                   <Controller
@@ -181,19 +233,7 @@ export const Navbar = ({ onClose, onSuccess, onError }: NavbarProps) => {
                 </li>
               ))}
             </ul>
-            <Button
-              outline={true}
-              className="mt-4"
-              color="light"
-              size="sm"
-              type="button"
-              onClick={() => append({ income: "", amount: "" })}
-            >
-              <span className="flex justify-center items-center gap-2">
-                {CONSTANTS.MODAL.ADD_BUTTON}{" "}
-                <PlusCircle size={16} color={"#333"} />
-              </span>
-            </Button>
+
           </Modal.Body>
           <Modal.Footer>
             <Button type="submit">
